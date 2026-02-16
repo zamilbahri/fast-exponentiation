@@ -39,10 +39,10 @@ const FinalResult: React.FC<FinalResultProps> = ({
   result,
 }: FinalResultProps) => {
   return (
-    <div className="bg-linear-to-r from-purple-900/50 to-purple-800/50 rounded-xl p-8 shadow-2xl border border-purple-600">
+    <div className="bg-linear-to-r from-purple-600/50 to-purple-800/50 rounded-xl p-8 shadow-2xl border border-purple-600">
       <div className="text-center">
         <p className="text-gray-300 text-lg mb-2">Final Result:</p>
-        <div className="text-3xl font-bold text-transparent bg-clip-text bg-linear-to-r from-purple-300 to-purple-500">
+        <div className="text-3xl font-bold text-purple-200">
           <MathText>{`${a}^{${n}} \\equiv ${result} \\pmod{${m}}`}</MathText>
         </div>
       </div>
