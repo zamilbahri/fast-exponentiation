@@ -14,10 +14,12 @@ import type { CalculationStep } from '../types';
  * @interface CalculationTableProps
  * @property {number[]} bits - Array of binary digits (0 or 1) of the exponent
  * @property {CalculationStep[]} steps - Array of calculation steps with values and operations
+ * @property {string} m - The modulus value used in the operations (mod m)
  */
 export interface CalculationTableProps {
   bits: number[];
   steps: CalculationStep[];
+  m: string;
 }
 
 /**
@@ -39,6 +41,7 @@ export interface CalculationTableProps {
 const CalculationTable: React.FC<CalculationTableProps> = ({
   bits,
   steps,
+  m,
 }: CalculationTableProps) => {
   return (
     <div className="bg-gray-800 rounded-xl p-6 shadow-2xl border border-gray-700 mb-8">
@@ -77,7 +80,9 @@ const CalculationTable: React.FC<CalculationTableProps> = ({
               ))}
             </tr>
             <tr>
-              <td className="px-4 py-3 text-gray-400 font-medium">Operation</td>
+              <td className="px-4 py-3 text-gray-400 font-medium">
+                Operation (mod {m})
+              </td>
               {steps.map((step, idx) => (
                 <td
                   key={idx}
