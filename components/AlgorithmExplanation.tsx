@@ -22,26 +22,26 @@ const AlgorithmExplanation: React.FC = () => {
         How It Works
       </h3>
       <ul className="text-gray-400 space-y-2 text-md">
-        <li>• Convert the exponent to binary representation</li>
+        <li>1. Convert the exponent to binary representation</li>
         <li>
-          • Start with the leftmost bit, initialize result as{' '}
+          2. Start with the leftmost bit, initialize result as{' '}
           <MathText>{'a'}</MathText>
         </li>
-        <li>• For each subsequent bit:</li>
+        <li>3. For each subsequent bit:</li>
         <li className="ml-6">
-          - If bit is <MathText>{'0'}</MathText>: square the previous result{' '}
+          • If bit is <MathText>{'0'}</MathText>: square the previous result{' '}
           <MathText>{'\\pmod{m}'}</MathText>
         </li>
         <li className="ml-6">
-          - If bit is <MathText>{'1'}</MathText>: multiply{' '}
+          • If bit is <MathText>{'1'}</MathText>: multiply{' '}
           <MathText>{'a'}</MathText> by the square of previous result{' '}
           <MathText>{'\\pmod{m}'}</MathText>
         </li>
-        <li>
-          • This reduces <MathText>{'O(n)'}</MathText> operations to{' '}
-          <MathText>{'O(\\log n)'}</MathText> operations
-        </li>
       </ul>
+      <p className="text-gray-400 text-md mt-4">
+        This reduces <MathText>{'O(n)'}</MathText> operations to{' '}
+        <MathText>{'O(\\log n)'}</MathText> operations
+      </p>
     </div>
   );
 };
