@@ -129,7 +129,7 @@ export const calculateFastExponentiation = (
       steps.push({
         bit: bits[i],
         value: currentValue,
-        operation: `${a} × (${prevValue})² mod ${m}`,
+        operation: `(${prevValue})²⋅${a} mod ${m}`,
       });
     }
   }
