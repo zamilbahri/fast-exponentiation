@@ -79,6 +79,7 @@ const App: React.FC = () => {
             <CalculationTable
               bits={calculationSteps.bits}
               steps={calculationSteps.steps}
+              m={m}
             />
 
             <FinalResult a={a} n={n} m={m} result={calculationSteps.result} />
