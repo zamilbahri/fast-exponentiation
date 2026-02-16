@@ -43,7 +43,7 @@ export const validateInputs = (a: string, n: string, m: string): string => {
   const nNum = parseInt(n);
   const mNum = parseInt(m);
 
-  const exponentLimit = 8192; // Arbitrary limit to prevent scrolling
+  const exponentLimit = 2 ** 24; // Arbitrary limit to prevent excessive scrolling.
 
   if (isNaN(aNum) || isNaN(nNum) || isNaN(mNum)) {
     return 'All inputs must be valid integers';
@@ -52,7 +52,7 @@ export const validateInputs = (a: string, n: string, m: string): string => {
     return 'All inputs must be non-negative';
   }
   if (aNum >= exponentLimit || nNum >= exponentLimit || mNum >= exponentLimit) {
-    return `All inputs must be less than ${exponentLimit}. This is because I waa too lazy to implement scrolling for large numbers :)`;
+    return `All inputs must be less than ${exponentLimit}.`;
   }
   if (mNum === 0) {
     return 'Modulus (m) must be greater than 0';
