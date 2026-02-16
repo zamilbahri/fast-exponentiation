@@ -7,7 +7,7 @@
  */
 
 import React from 'react';
-import MathText from './Math';
+import MathText from './MathText';
 
 /**
  * Props for the InputPanel component

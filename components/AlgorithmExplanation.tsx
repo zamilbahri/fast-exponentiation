@@ -6,7 +6,7 @@
  */
 
 import React from 'react';
-import MathText from './Math';
+import MathText from './MathText';
 
 /**
  * Renders an explanation of the fast exponentiation algorithm.

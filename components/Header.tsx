@@ -5,7 +5,7 @@
  */
 
 import React from 'react';
-import MathText from './Math';
+import MathText from './MathText';
 
 /**
  * Renders the header section with title and description.
