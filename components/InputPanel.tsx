@@ -7,6 +7,7 @@
  */
 
 import React from 'react';
+import MathText from './Math';
 
 /**
  * Props for the InputPanel component
@@ -19,7 +20,7 @@ import React from 'react';
  * @property {(value: string) => void} onMChange - Callback when modulus input changes
  * @property {string} error - Error message to display (empty if no error)
  */
-export interface InputPanelProps {
+interface InputPanelProps {
   a: string;
   n: string;
   m: string;
@@ -77,7 +78,7 @@ const InputPanel: React.FC<InputPanelProps> = ({
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         <div>
           <label className="block text-purple-300 font-semibold mb-2">
-            Base (a)
+            Base <MathText>(a)</MathText>
           </label>
           <input
             type="text"
@@ -89,7 +90,7 @@ const InputPanel: React.FC<InputPanelProps> = ({
         </div>
         <div>
           <label className="block text-purple-300 font-semibold mb-2">
-            Exponent (n)
+            Exponent <MathText>(n)</MathText>
           </label>
           <input
             type="text"
@@ -101,7 +102,7 @@ const InputPanel: React.FC<InputPanelProps> = ({
         </div>
         <div>
           <label className="block text-purple-300 font-semibold mb-2">
-            Modulus (m)
+            Modulus <MathText>(m)</MathText>
           </label>
           <input
             type="text"

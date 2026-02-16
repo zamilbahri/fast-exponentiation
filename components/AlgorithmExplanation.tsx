@@ -6,6 +6,7 @@
  */
 
 import React from 'react';
+import MathText from './Math';
 
 /**
  * Renders an explanation of the fast exponentiation algorithm.
@@ -17,20 +18,29 @@ import React from 'react';
 const AlgorithmExplanation: React.FC = () => {
   return (
     <div className="mt-8 bg-gray-800/50 rounded-xl p-6 border border-gray-700">
-      <h3 className="text-lg font-semibold text-purple-300 mb-3">
+      <h3 className="text-xl font-semibold text-purple-300 mb-3">
         How It Works
       </h3>
-      <ul className="text-gray-400 space-y-2 text-sm">
+      <ul className="text-gray-400 space-y-2 text-md">
         <li>• Convert the exponent to binary representation</li>
-        <li>• Start with the leftmost bit, initialize result as a</li>
+        <li>
+          • Start with the leftmost bit, initialize result as{' '}
+          <MathText>{'a'}</MathText>
+        </li>
         <li>• For each subsequent bit:</li>
         <li className="ml-6">
-          - If bit is 0: square the previous result (mod m)
+          - If bit is <MathText>{'0'}</MathText>: square the previous result{' '}
+          <MathText>{'\\pmod{m}'}</MathText>
         </li>
         <li className="ml-6">
-          - If bit is 1: multiply a by the square of previous result (mod m)
+          - If bit is <MathText>{'1'}</MathText>: multiply{' '}
+          <MathText>{'a'}</MathText> by the square of previous result{' '}
+          <MathText>{'\\pmod{m}'}</MathText>
         </li>
-        <li>• This reduces O(n) operations to O(log n) operations</li>
+        <li>
+          • This reduces <MathText>{'O(n)'}</MathText> operations to{' '}
+          <MathText>{'O(\\log n)'}</MathText> operations
+        </li>
       </ul>
     </div>
   );

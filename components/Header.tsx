@@ -5,6 +5,7 @@
  */
 
 import React from 'react';
+import MathText from './Math';
 
 /**
  * Renders the header section with title and description.
@@ -20,7 +21,9 @@ const Header: React.FC = () => {
         Fast Modular Exponentiation
       </h1>
       <p className="text-gray-400 text-lg">
-        Calculate a<sup>n</sup> (mod m) using binary exponentiation
+        Calculate{' '}
+        <MathText className="text-gray-300">{'a^n \\pmod{m}'}</MathText> using
+        binary exponentiation
       </p>
     </div>
   );

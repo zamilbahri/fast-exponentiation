@@ -8,6 +8,7 @@
 
 import React from 'react';
 import type { CalculationStep } from '../types';
+import MathText from './Math';
 
 /**
  * Props for the CalculationTable component
@@ -63,7 +64,7 @@ const CalculationTable: React.FC<CalculationTableProps> = ({
                         : 'bg-gray-700 text-gray-300'
                     }`}
                   >
-                    {bit}
+                    <MathText>{String(bit)}</MathText>
                   </span>
                 </td>
               ))}
@@ -75,20 +76,20 @@ const CalculationTable: React.FC<CalculationTableProps> = ({
                   key={idx}
                   className="px-4 py-3 text-center text-white font-mono text-lg"
                 >
-                  {step.value}
+                  <MathText>{String(step.value)}</MathText>
                 </td>
               ))}
             </tr>
             <tr>
               <td className="px-4 py-3 text-gray-400 font-medium">
-                Operation (mod {m})
+                Operation <MathText>{`(\\bmod ${m})`}</MathText>
               </td>
               {steps.map((step, idx) => (
                 <td
                   key={idx}
                   className="px-4 py-3 text-center text-gray-300 text-sm"
                 >
-                  {step.operation}
+                  <MathText>{step.operation}</MathText>
                 </td>
               ))}
             </tr>

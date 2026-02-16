@@ -6,6 +6,7 @@
  */
 
 import React from 'react';
+import MathText from './Math';
 
 /**
  * Props for the FinalResult component
@@ -41,10 +42,9 @@ const FinalResult: React.FC<FinalResultProps> = ({
     <div className="bg-linear-to-r from-purple-900/50 to-purple-800/50 rounded-xl p-8 shadow-2xl border border-purple-600">
       <div className="text-center">
         <p className="text-gray-300 text-lg mb-2">Final Result:</p>
-        <p className="text-4xl font-bold text-transparent bg-clip-text bg-linear-to-r from-purple-300 to-purple-500">
-          {a}
-          <sup>{n}</sup> ≡ {result} (mod {m})
-        </p>
+        <div className="text-3xl font-bold text-transparent bg-clip-text bg-linear-to-r from-purple-300 to-purple-500">
+          <MathText>{`${a}^{${n}} \\equiv ${result} \\pmod{${m}}`}</MathText>
+        </div>
       </div>
     </div>
   );

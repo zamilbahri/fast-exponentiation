@@ -7,6 +7,7 @@
  */
 
 import React from 'react';
+import MathText from './Math';
 
 /**
  * Props for the BinaryRepresentation component
@@ -38,14 +39,18 @@ const BinaryRepresentation: React.FC<BinaryRepresentationProps> = ({
   return (
     <div className="bg-gray-800 rounded-xl p-6 shadow-2xl border border-gray-700 mb-8">
       <h2 className="text-xl font-semibold text-purple-300 mb-4">
-        Binary Representation of {n}
+        Binary Representation of <MathText>{n}</MathText>
       </h2>
       <div className="flex items-center gap-2">
-        <span className="text-gray-400">{n} =</span>
-        <span className="text-2xl font-mono text-purple-400">
-          ({binaryStr})₂
+        <span className="text-gray-400">
+          <MathText>{n}</MathText> =
         </span>
-        <span className="text-gray-400 ml-2">({bitCount} bits)</span>
+        <span className="text-2xl font-mono text-purple-400">
+          <MathText>{`${binaryStr}_2`}</MathText>
+        </span>
+        <span className="text-gray-400 ml-2">
+          <MathText>{`(${bitCount} \\text{ bits)}`}</MathText>
+        </span>
       </div>
     </div>
   );
