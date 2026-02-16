@@ -9,7 +9,7 @@
   <!-- Background with rounded corners -->
   <rect width="100" height="100" rx="20" fill="url(#grad)"/>
   
-  <!-- a^n notation - larger sizes to bring them closer -->
+  <!-- a^n notation - n positioned as superscript close to a -->
   <text x="22" y="78" font-family="'Times New Roman', serif" font-size="68" font-weight="bold" fill="white">a</text>
-  <text x="68" y="38" font-family="'Times New Roman', serif" font-size="46" font-weight="bold" fill="white">n</text>
+  <text x="52" y="50" font-family="'Times New Roman', serif" font-size="46" font-weight="bold" fill="white">n</text>
 </svg>
