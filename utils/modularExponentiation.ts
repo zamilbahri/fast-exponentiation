@@ -121,7 +121,7 @@ export const calculateFastExponentiation = (
       steps.push({
         bit: bits[i],
         value: currentValue,
-        operation: `(${prevValue})² mod ${m}`,
+        operation: `${prevValue}²`,
       });
     } else {
       // Bit is 1: square the previous result and multiply by a
@@ -129,7 +129,7 @@ export const calculateFastExponentiation = (
       steps.push({
         bit: bits[i],
         value: currentValue,
-        operation: `(${prevValue})²⋅${a} mod ${m}`,
+        operation: `(${prevValue})²⋅${a}`,
       });
     }
   }
