@@ -10,7 +10,7 @@
  * by leveraging the binary representation of the exponent.
  */
 
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import Header from './components/Header';
 import InputPanel from './components/InputPanel';
 import BinaryRepresentation from './components/BinaryRepresentation';
@@ -31,11 +31,31 @@ import type { CalculationResult } from './types';
  * <App />
  */
 const App: React.FC = () => {
-  const [a, setA] = useState<string>('2');
-  const [n, setN] = useState<string>('23');
-  const [m, setM] = useState<string>('100');
+  // Load initial values from localStorage or use defaults
+  const [a, setA] = useState<string>(
+    () => localStorage.getItem('modexp_a') || '3',
+  );
+  const [n, setN] = useState<string>(
+    () => localStorage.getItem('modexp_n') || '100',
+  );
+  const [m, setM] = useState<string>(
+    () => localStorage.getItem('modexp_m') || '23',
+  );
 
-  // Validate inputs (no side effects)
+  // Save to localStorage whenever values change
+  useEffect(() => {
+    localStorage.setItem('modexp_a', a);
+  }, [a]);
+
+  useEffect(() => {
+    localStorage.setItem('modexp_n', n);
+  }, [n]);
+
+  useEffect(() => {
+    localStorage.setItem('modexp_m', m);
+  }, [m]);
+
+  // Validate inputs
   const error = useMemo<string>(() => {
     return validateInputs(a, n, m);
   }, [a, n, m]);
