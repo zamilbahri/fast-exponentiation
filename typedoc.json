@@ -1,9 +1,9 @@
 {
   "entryPoints": [
-    "App.tsx",
-    "utils/**/*.ts",
-    "types/**/*.ts",
-    "components/**/*.tsx"
+    "src/App.tsx",
+    "src/utils/**/*.ts",
+    "src/types/**/*.ts",
+    "src/components/**/*.tsx"
   ],
   "entryPointStrategy": "expand",
   "out": "docs"

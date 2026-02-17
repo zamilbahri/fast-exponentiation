@@ -15,3 +15,7 @@ An interactive calculator that demonstrates the fast exponentiation algorithm fo
 5. Final result is a^n (mod m)
 
 This reduces O(n) operations to O(log n) operations
+
+## Related
+
+Check out my [Chinese Remainder Theorem solver](https://zamilbahri.github.io/crt-solver)!

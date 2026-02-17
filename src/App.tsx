@@ -17,6 +17,7 @@ import BinaryRepresentation from './components/BinaryRepresentation';
 import CalculationTable from './components/CalculationTable';
 import FinalResult from './components/FinalResult';
 import AlgorithmExplanation from './components/AlgorithmExplanation';
+import Footer from './components/Footer';
 import {
   validateInputs,
   calculateFastExponentiation,
@@ -107,6 +108,7 @@ const App: React.FC = () => {
         )}
 
         <AlgorithmExplanation />
+        <Footer />
       </div>
     </div>
   );
