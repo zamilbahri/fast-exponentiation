@@ -18,4 +18,4 @@ This reduces O(n) operations to O(log n) operations
 
 ## Related
 
-Check out my [Chinese Remainder Theorem solver](https://zamilbahri.github.io/crt-solver)!
+Check out my [Chinese Remainder Theorem solver](https://github.com/zamilbahri/crt-solver)!
