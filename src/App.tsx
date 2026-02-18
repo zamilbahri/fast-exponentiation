@@ -24,6 +24,47 @@ import {
 } from './utils/modularExponentiation';
 import type { CalculationResult } from './types';
 
+const DEFAULTS = { a: '3', n: '100', m: '23' } as const;
+
+const readFromUrl = (): { a: string; n: string; m: string } => {
+  try {
+    const sp = new URLSearchParams(window.location.search);
+
+    const a = (sp.get('a') ?? '').trim();
+    const n = (sp.get('n') ?? '').trim();
+    const m = (sp.get('m') ?? '').trim();
+
+    return {
+      a: a !== '' ? a : DEFAULTS.a,
+      n: n !== '' ? n : DEFAULTS.n,
+      m: m !== '' ? m : DEFAULTS.m,
+    };
+  } catch {
+    return { ...DEFAULTS };
+  }
+};
+
+const writeToUrl = (next: { a: string; n: string; m: string }): void => {
+  try {
+    const sp = new URLSearchParams();
+
+    // Treat empty as “unset”; also omit defaults to keep URLs clean.
+    if (next.a.trim() !== '' && next.a !== DEFAULTS.a) sp.set('a', next.a);
+    if (next.n.trim() !== '' && next.n !== DEFAULTS.n) sp.set('n', next.n);
+    if (next.m.trim() !== '' && next.m !== DEFAULTS.m) sp.set('m', next.m);
+
+    const qs = sp.toString(); // toString() returns the query string without '?' [web:28]
+    const newUrl = qs
+      ? `${window.location.pathname}?${qs}`
+      : window.location.pathname;
+
+    // replaceState updates the current URL without a page reload [web:23]
+    window.history.replaceState(null, '', newUrl); // replace instead of pushing history [web:23]
+  } catch {
+    // ignore
+  }
+};
+
 /**
  * Main application component that orchestrates the fast exponentiation calculator.
  *
@@ -32,29 +73,27 @@ import type { CalculationResult } from './types';
  * <App />
  */
 const App: React.FC = () => {
-  // Load initial values from localStorage or use defaults
-  const [a, setA] = useState<string>(
-    () => localStorage.getItem('modexp_a') || '3',
-  );
-  const [n, setN] = useState<string>(
-    () => localStorage.getItem('modexp_n') || '100',
-  );
-  const [m, setM] = useState<string>(
-    () => localStorage.getItem('modexp_m') || '23',
-  );
+  const [a, setA] = useState<string>(() => readFromUrl().a);
+  const [n, setN] = useState<string>(() => readFromUrl().n);
+  const [m, setM] = useState<string>(() => readFromUrl().m);
 
-  // Save to localStorage whenever values change
-  useEffect(() => {
-    localStorage.setItem('modexp_a', a);
-  }, [a]);
+  const writeTimer = React.useRef<number | null>(null);
 
   useEffect(() => {
-    localStorage.setItem('modexp_n', n);
-  }, [n]);
+    if (writeTimer.current) window.clearTimeout(writeTimer.current);
 
-  useEffect(() => {
-    localStorage.setItem('modexp_m', m);
-  }, [m]);
+    writeTimer.current = window.setTimeout(() => {
+      writeToUrl({ a, n, m });
+      writeTimer.current = null;
+    }, 200);
+
+    return () => {
+      if (writeTimer.current) {
+        window.clearTimeout(writeTimer.current);
+        writeTimer.current = null;
+      }
+    };
+  }, [a, n, m]);
 
   // Validate inputs
   const error = useMemo<string>(() => {
