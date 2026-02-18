@@ -24,8 +24,53 @@ import {
 } from './utils/modularExponentiation';
 import type { CalculationResult } from './types';
 
+/**
+ * Default input values used when the URL does not provide explicit parameters.
+ *
+ * These defaults define the calculator’s initial state on a “clean” load
+ * (i.e., no `?a=...&n=...&m=...` in the URL), and act as the fallback values
+ * returned by {@link readFromUrl}.
+ *
+ * Notes:
+ * - Values are stored as strings because the UI inputs are controlled `<input>`s.
+ * - Marked `as const` so each property is a string literal type and the object is
+ *   deeply readonly, preventing accidental mutation.
+ *
+ * @example
+ * // If the page is loaded without query params:
+ * // /modexp
+ * // then the initial inputs become:
+ * // a="3", n="100", m="23"
+ */
 const DEFAULTS = { a: '3', n: '100', m: '23' } as const;
 
+/**
+ * Reads modular exponentiation inputs from the current page URL query string.
+ *
+ * The function looks for `a`, `n`, and `m` in `window.location.search`.
+ * For each parameter:
+ * - If the parameter is missing or is an empty/whitespace-only string, the
+ *   corresponding value from {@link DEFAULTS} is used instead.
+ *
+ * This is intended to be used in a `useState` lazy initializer so values are read
+ * once on initial load, enabling shareable, refresh-persistent inputs.
+ *
+ * Important:
+ * - This function does not validate numeric correctness (e.g., non-integers,
+ *   negative exponents, `m <= 0`, etc.). Validation should be performed by the
+ *   app’s existing `validateInputs` logic.
+ * - If `URLSearchParams` parsing fails for any reason, {@link DEFAULTS} is returned.
+ *
+ * @returns An object containing `{ a, n, m }` as strings suitable for controlled inputs.
+ *
+ * @example
+ * // URL: /modexp?a=5&n=13&m=23
+ * // returns: { a: "5", n: "13", m: "23" }
+ *
+ * @example
+ * // URL: /modexp?a=&n=7
+ * // returns: { a: "3", n: "7", m: "23" }  // a and m fall back to defaults
+ */
 const readFromUrl = (): { a: string; n: string; m: string } => {
   try {
     const sp = new URLSearchParams(window.location.search);
@@ -44,6 +89,35 @@ const readFromUrl = (): { a: string; n: string; m: string } => {
   }
 };
 
+/**
+ * Writes the given input values to the current page URL as query parameters,
+ * without reloading the page.
+ *
+ * Behavior:
+ * - Creates a new `URLSearchParams` instance and conditionally sets `a`, `n`, and `m`.
+ * - Parameters are omitted when:
+ *   - The value is empty/whitespace-only (treated as “unset”), and/or
+ *   - The value equals the corresponding {@link DEFAULTS} value (to keep URLs clean).
+ * - Updates the URL using `window.history.replaceState`, so the current history
+ *   entry is replaced (typing doesn’t create a long back-button history).
+ *
+ * This is typically called from a debounced `useEffect` that watches input state.
+ *
+ * Important:
+ * - This function is purely about URL state; it does not validate inputs.
+ * - If any error occurs while constructing or writing the URL, the function
+ *   fails silently (no throw), leaving the current URL unchanged.
+ *
+ * @param next - The next input state to persist to the URL.
+ *
+ * @example
+ * writeToUrl({ a: "5", n: "13", m: "23" });
+ * // URL becomes: /fast-exponentiation/?a=5&n=13  (m omitted if it matches DEFAULTS.m)
+ *
+ * @example
+ * writeToUrl({ a: "", n: "", m: "" });
+ * // URL becomes: /modexp  (no query string)
+ */
 const writeToUrl = (next: { a: string; n: string; m: string }): void => {
   try {
     const sp = new URLSearchParams();
