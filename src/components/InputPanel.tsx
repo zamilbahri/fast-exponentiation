@@ -20,7 +20,7 @@ import MathText from './MathText';
  * @property {(value: string) => void} onMChange - Callback when modulus input changes
  * @property {string} error - Error message to display (empty if no error)
  */
-interface InputPanelProps {
+export interface InputPanelProps {
   a: string;
   n: string;
   m: string;
