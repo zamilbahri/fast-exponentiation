@@ -24,7 +24,7 @@
  */
 export interface CalculationStep {
   bit: number;
-  value: number;
+  value: bigint;
   operation: string;
 }
 
@@ -38,7 +38,7 @@ export interface CalculationStep {
  * @property {number[]} bits - Array of binary digits (0 or 1) representing the exponent
  * @property {CalculationStep[]} steps - Array of calculation steps, one per bit plus initial step
  * @property {string} binaryStr - String representation of the exponent in binary (e.g., "10111")
- * @property {number} result - The final result: a^n mod m
+ * @property {bigint} result - The final result: a^n mod m
  *
  * @example
  * {
@@ -56,29 +56,29 @@ export interface CalculationResult {
   bits: number[];
   steps: CalculationStep[];
   binaryStr: string;
-  result: number;
+  result: bigint;
 }
 
 /**
- * Input values for modular exponentiation.
+ * Parsed and validated modular exponentiation inputs.
  *
- * Represents the three parameters needed for the calculation: base (a),
- * exponent (n), and modulus (m).
+ * Contains the canonical, computation-ready values for \(a\), \(n\), and \(m\)
+ * after strict base-10 parsing (non-negative integer strings) and conversion to `bigint`.
  *
- * @interface ModularExpInput
- * @property {string} a - The base value as a string (will be parsed to integer)
- * @property {string} n - The exponent value as a string (will be parsed to integer)
- * @property {string} m - The modulus value as a string (will be parsed to integer)
+ * @interface ParsedInputs
+ * @property {bigint} a - Base value \(a\) as a `bigint` (non-negative).
+ * @property {bigint} n - Exponent value \(n\) as a `bigint` (non-negative).
+ * @property {bigint} m - Modulus value \(m\) as a `bigint` (must be > 0 for modular arithmetic).
  *
  * @example
  * {
- *   a: "2",
- *   n: "23",
- *   m: "100"
+ *   a: 2n,
+ *   n: 23n,
+ *   m: 100n
  * }
  */
-export interface ModularExpInput {
-  a: string;
-  n: string;
-  m: string;
+export interface ParsedInputs {
+  a: bigint;
+  n: bigint;
+  m: bigint;
 }

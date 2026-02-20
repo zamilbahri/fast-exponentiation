@@ -19,8 +19,8 @@ import FinalResult from './components/FinalResult';
 import AlgorithmExplanation from './components/AlgorithmExplanation';
 import Footer from './components/Footer';
 import {
-  validateInputs,
   calculateFastExponentiation,
+  validateAndParseInputs,
 } from './utils/modularExponentiation';
 import type { CalculationResult } from './types';
 
@@ -147,12 +147,15 @@ const writeToUrl = (next: { a: string; n: string; m: string }): void => {
  * <App />
  */
 const App: React.FC = () => {
+  // Initialize input state from URL query parameters, falling back to defaults
   const [a, setA] = useState<string>(() => readFromUrl().a);
   const [n, setN] = useState<string>(() => readFromUrl().n);
   const [m, setM] = useState<string>(() => readFromUrl().m);
 
+  // Ref to hold the debounce timer ID for URL writing
   const writeTimer = React.useRef<number | null>(null);
 
+  // Debounced effect to write input state to URL on changes
   useEffect(() => {
     if (writeTimer.current) window.clearTimeout(writeTimer.current);
 
@@ -169,23 +172,16 @@ const App: React.FC = () => {
     };
   }, [a, n, m]);
 
-  // Validate inputs
-  const error = useMemo<string>(() => {
-    return validateInputs(a, n, m);
+  // Memoized validation of inputs, returning an error message or parsed values
+  const { error, parsed } = useMemo(() => {
+    return validateAndParseInputs(a, n, m);
   }, [a, n, m]);
 
-  // Calculate the fast exponentiation steps (only if valid)
+  // Memoized calculation of the fast exponentiation steps, only when parsed inputs are valid
   const calculationSteps = useMemo<CalculationResult | null>(() => {
-    if (error) {
-      return null;
-    }
-
-    const aNum = parseInt(a);
-    const nNum = parseInt(n);
-    const mNum = parseInt(m);
-
-    return calculateFastExponentiation(aNum, nNum, mNum);
-  }, [a, n, m, error]);
+    if (!parsed) return null;
+    return calculateFastExponentiation(parsed.a, parsed.n, parsed.m);
+  }, [parsed]);
 
   return (
     <div className="min-h-screen bg-linear-to-br from-gray-900 via-gray-800 to-gray-900 p-8">
