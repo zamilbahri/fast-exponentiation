@@ -95,6 +95,22 @@ export const calculateFastExponentiation = (
   n: number,
   m: number,
 ): CalculationResult => {
+  // case when n is 0, a^0 is 1 (mod m)
+  if (n === 0) {
+    return {
+      bits: [0],
+      steps: [
+        {
+          bit: 0,
+          value: 1 % m,
+          operation: 'a^0 = 1',
+        },
+      ],
+      binaryStr: '0',
+      result: 1 % m,
+    };
+  }
+
   // Convert exponent n to binary representation
   const binaryStr = n.toString(2);
   const bits = binaryStr.split('').map((bit) => parseInt(bit));
