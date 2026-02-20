@@ -15,50 +15,125 @@
  * Space Complexity: O(log n) for storing the binary representation
  */
 
-import type { CalculationResult } from '../types';
+import type { CalculationResult, ParsedInputs } from '../types';
+
+const EXPONENT_LIMIT = 2n ** 24n;
 
 /**
- * Validates input parameters for modular exponentiation.
+ * Checks whether a string consists of one or more ASCII decimal digits (`0`-`9`).
  *
- * Checks that all inputs are valid non-negative integers within acceptable ranges
- * and that the modulus is positive. Provides clear error messages for invalid inputs.
+ * @remarks
+ * This function does not trim whitespace. Callers that accept user/URL input
+ * should typically `trim()` first.
  *
- * @param {string} a - Base value
- * @param {string} n - Exponent value
- * @param {string} m - Modulus value
- * @returns {string} Error message if validation fails, empty string if all inputs are valid
- *
- * @throws {string} Returns error message (not thrown as exception):
- *   - "All inputs must be valid integers" - if any input is not a valid integer
- *   - "All inputs must be non-negative" - if any input is negative
- *   - "All inputs must be less than 4096" - if any input exceeds the limit
- *   - "Modulus (m) must be greater than 0" - if modulus is zero
+ * @param s - The string to test.
+ * @returns `true` if `s` matches `/^\d+$/`, otherwise `false`.
  *
  * @example
- * const error = validateInputs('2', '23', '100');
- * if (error) console.error(error);
+ * ```ts
+ * isNonNegativeIntegerString("0");    // true
+ * isNonNegativeIntegerString("123");  // true
+ * isNonNegativeIntegerString("");     // false
+ * isNonNegativeIntegerString(" 1 ");  // false (not trimmed)
+ * isNonNegativeIntegerString("1.0");  // false
+ * ```
+ *
+ * @public
  */
-export const validateInputs = (a: string, n: string, m: string): string => {
-  const aNum = parseInt(a);
-  const nNum = parseInt(n);
-  const mNum = parseInt(m);
+export function isNonNegativeIntegerString(s: string): boolean {
+  return /^\d+$/.test(s);
+}
 
-  const exponentLimit = 2 ** 24; // Arbitrary limit to prevent excessive scrolling.
+/**
+ * Strictly parses a non-negative base-10 integer string into a {@link bigint}.
+ *
+ * @remarks
+ * This is intended for untrusted input (URL parameters, form fields, CSV cells).
+ * It trims leading/trailing whitespace, then requires the remaining string to
+ * contain only decimal digits. If validation passes, it converts using `BigInt`.
+ *
+ * @param input - Raw input string to parse.
+ * @param fieldName - Name used in the thrown error message (e.g., `"m"`).
+ * @returns The parsed {@link bigint}.
+ *
+ * @throws {@link Error} If `input.trim()` is not a non-negative integer string.
+ * The message is `${fieldName} must be a non-negative integer.`
+ *
+ * @example
+ * ```ts
+ * parseBigIntStrict(" 0012 ", "a"); // 12n
+ * parseBigIntStrict("0", "m");      // 0n
+ * parseBigIntStrict("1.5", "n");    // throws Error: n must be a non-negative integer.
+ * parseBigIntStrict("12abc", "a");  // throws Error: a must be a non-negative integer.
+ * ```
+ *
+ * @public
+ */
+export function parseBigIntStrict(input: string, fieldName = 'value'): bigint {
+  const s = input.trim();
+  if (!isNonNegativeIntegerString(s)) {
+    throw new Error(`${fieldName} must be a non-negative integer.`);
+  }
+  return BigInt(s);
+}
 
-  if (isNaN(aNum) || isNaN(nNum) || isNaN(mNum)) {
-    return 'All inputs must be valid integers';
+/**
+ * Validates and parses modular exponentiation inputs from raw strings.
+ *
+ * @remarks
+ * This is a boundary function intended for UI and URL/querystring ingestion.
+ * It converts raw strings into {@link bigint}s using {@link parseBigIntStrict},
+ * then enforces cross-field rules such as an upper bound and `m > 0`.
+ *
+ * This function never throws; it converts thrown parse errors into a user-facing
+ * error message and returns `parsed: null`.
+ *
+ * @param aRaw - Raw base value (string) for \(a\).
+ * @param nRaw - Raw exponent value (string) for \(n\).
+ * @param mRaw - Raw modulus value (string) for \(m\).
+ * @returns An object containing:
+ * - `error`: empty string when valid, otherwise a message suitable for UI.
+ * - `parsed`: the parsed values when valid, otherwise `null`.
+ *
+ * @example
+ * ```ts
+ * const { error, parsed } = validateAndParseInputs("2", "23", "100");
+ * if (!error && parsed) {
+ *   // parsed.a === 2n, parsed.n === 23n, parsed.m === 100n
+ * }
+ * ```
+ *
+ * @public
+ */
+export function validateAndParseInputs(
+  aRaw: string,
+  nRaw: string,
+  mRaw: string,
+): { error: string; parsed: ParsedInputs | null } {
+  try {
+    const a = parseBigIntStrict(aRaw, 'a');
+    const n = parseBigIntStrict(nRaw, 'n');
+    const m = parseBigIntStrict(mRaw, 'm');
+
+    if (a >= EXPONENT_LIMIT || n >= EXPONENT_LIMIT || m >= EXPONENT_LIMIT) {
+      return {
+        error: `All inputs must be less than ${EXPONENT_LIMIT.toString()}.`,
+        parsed: null,
+      };
+    }
+
+    if (m === 0n) {
+      return { error: 'Modulus (m) must be greater than 0', parsed: null };
+    }
+
+    return { error: '', parsed: { a, n, m } };
+  } catch (e) {
+    // Convert “throw” into an error string for UI. [web:201]
+    const msg =
+      e instanceof Error ? e.message : 'All inputs must be valid integers';
+    return { error: msg, parsed: null };
   }
-  if (aNum < 0 || nNum < 0 || mNum < 0) {
-    return 'All inputs must be non-negative';
-  }
-  if (aNum >= exponentLimit || nNum >= exponentLimit || mNum >= exponentLimit) {
-    return `All inputs must be less than ${exponentLimit}.`;
-  }
-  if (mNum === 0) {
-    return 'Modulus (m) must be greater than 0';
-  }
-  return '';
-};
+}
 
 /**
  * Calculates a^n (mod m) using the fast exponentiation algorithm.
@@ -75,9 +150,9 @@ export const validateInputs = (a: string, n: string, m: string): string => {
  *    - If the current bit is 1, also multiply by a (mod m)
  * 4. Return the final result and all intermediate steps
  *
- * @param {number} a - Base value (0 <= a)
- * @param {number} n - Exponent value (0 <= n)
- * @param {number} m - Modulus value (m > 0)
+ * @param {bigint} a - Base value (0 <= a)
+ * @param {bigint} n - Exponent value (0 <= n)
+ * @param {bigint} m - Modulus value (m > 0)
  * @returns {CalculationResult} Object containing:
  *   - bits: Array of binary digits (0 or 1)
  *   - steps: Array of CalculationStep objects with value and operation description
@@ -91,10 +166,26 @@ export const validateInputs = (a: string, n: string, m: string): string => {
  * console.log(result.steps.length); // 5
  */
 export const calculateFastExponentiation = (
-  a: number,
-  n: number,
-  m: number,
+  a: bigint,
+  n: bigint,
+  m: bigint,
 ): CalculationResult => {
+  // Case n = 0: a^0 is always 1 (mod m)
+  if (n === 0n) {
+    return {
+      bits: [0],
+      steps: [
+        {
+          bit: 0,
+          value: 1n % m,
+          operation: 'a^0 = 1',
+        },
+      ],
+      binaryStr: '0',
+      result: 1n % m,
+    };
+  }
+
   // Convert exponent n to binary representation
   const binaryStr = n.toString(2);
   const bits = binaryStr.split('').map((bit) => parseInt(bit));

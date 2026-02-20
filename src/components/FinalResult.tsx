@@ -14,13 +14,13 @@ import MathText from './MathText';
  * @property {string} a - The base value
  * @property {string} n - The exponent value
  * @property {string} m - The modulus value
- * @property {number} result - The calculated result (a^n mod m)
+ * @property {bigint} result - The calculated result (a^n mod m)
  */
 export interface FinalResultProps {
   a: string;
   n: string;
   m: string;
-  result: number;
+  result: bigint;
 }
 
 /**
