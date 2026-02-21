@@ -45,34 +45,52 @@ const CalculationTable: React.FC<CalculationTableProps> = ({
   m,
 }) => {
   const rowCount = Math.min(bits.length, steps.length);
+  const [showOperation, setShowOperation] = React.useState<boolean>(true);
+
+  // const operationColumnId = 'operation-column';
 
   return (
     <div className="bg-gray-800 rounded-xl p-6 shadow-2xl border border-gray-700 mb-8">
-      <h2 className="text-xl font-semibold text-purple-300 mb-4">
-        Fast Exponentiation Steps
-      </h2>
+      <div className="flex items-center justify-between mb-4 gap-3">
+        <h2 className="text-xl font-semibold text-purple-300">
+          Fast Exponentiation Steps
+        </h2>
 
-      <div className="max-h-[50vh] overflow-auto">
+        <button
+          type="button"
+          onClick={() => setShowOperation((v) => !v)}
+          aria-expanded={showOperation}
+          // aria-controls={operationColumnId}
+          className="text-sm text-gray-300 hover:text-white border border-gray-600 rounded-md px-3 py-1"
+        >
+          {showOperation ? 'Hide operation' : 'Show operation'}
+        </button>
+      </div>
+
+      <div className="max-h-[50vh] overflow-auto rounded-lg">
         <table className="w-full table-auto border-collapse">
           <thead>
             <tr className="border-b border-gray-700">
               <th
                 scope="col"
-                className="sticky top-0 left-0 z-20 bg-gray-800 px-4 py-3 text-left text-gray-400 font-medium border-r border-gray-700"
+                className="sticky top-0 left-0 z-30 bg-gray-800 px-4 py-3 text-left text-gray-400 font-medium border-r border-gray-700"
               >
                 Bit
               </th>
 
-              <th
-                scope="col"
-                className="sticky top-0 z-10 bg-gray-800 px-4 py-3 text-left text-gray-400 font-medium border-r border-gray-700"
-              >
-                Operation <MathText>{`(\\bmod ${m})`}</MathText>
-              </th>
+              {showOperation && (
+                <th
+                  // id={operationColumnId}
+                  scope="col"
+                  className="sticky top-0 z-20 bg-gray-800 px-4 py-3 text-left text-gray-400 font-medium border-r border-gray-700"
+                >
+                  Operation <MathText>{`(\\bmod ${m})`}</MathText>
+                </th>
+              )}
 
               <th
                 scope="col"
-                className="sticky top-0 z-10 bg-gray-800 px-4 py-3 text-left text-gray-400 font-medium"
+                className="sticky top-0 z-20 bg-gray-800 px-4 py-3 text-left text-gray-400 font-medium"
               >
                 Result
               </th>
@@ -89,7 +107,7 @@ const CalculationTable: React.FC<CalculationTableProps> = ({
                   key={idx}
                   className="border-b border-gray-700 last:border-b-0"
                 >
-                  <td className="sticky left-0 z-10 bg-gray-800 px-4 py-3 border-r border-gray-700">
+                  <td className="sticky left-0 z-20 bg-gray-800 px-4 py-3 border-r border-gray-700">
                     <span
                       className={`inline-block px-3 py-1 rounded font-mono font-bold ${
                         bit === 1
@@ -101,9 +119,11 @@ const CalculationTable: React.FC<CalculationTableProps> = ({
                     </span>
                   </td>
 
-                  <td className="px-4 py-3 text-gray-300 text-sm  border-r border-gray-700">
-                    <MathText>{step.operation}</MathText>
-                  </td>
+                  {showOperation && (
+                    <td className="px-4 py-3 text-gray-300 text-sm border-r border-gray-700">
+                      <MathText>{step.operation}</MathText>
+                    </td>
+                  )}
 
                   <td className="px-4 py-3 text-white font-mono text-lg">
                     <MathText>{String(step.value)}</MathText>
