@@ -200,6 +200,7 @@ const App: React.FC = () => {
 
         {calculationSteps && !error && (
           <>
+            <FinalResult a={a} n={n} m={m} result={calculationSteps.result} />
             <BinaryRepresentation
               n={n}
               binaryStr={calculationSteps.binaryStr}
@@ -211,8 +212,6 @@ const App: React.FC = () => {
               steps={calculationSteps.steps}
               m={m}
             />
-
-            <FinalResult a={a} n={n} m={m} result={calculationSteps.result} />
           </>
         )}
 

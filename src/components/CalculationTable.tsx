@@ -43,56 +43,74 @@ const CalculationTable: React.FC<CalculationTableProps> = ({
   bits,
   steps,
   m,
-}: CalculationTableProps) => {
+}) => {
+  const rowCount = Math.min(bits.length, steps.length);
+
   return (
     <div className="bg-gray-800 rounded-xl p-6 shadow-2xl border border-gray-700 mb-8">
       <h2 className="text-xl font-semibold text-purple-300 mb-4">
         Fast Exponentiation Steps
       </h2>
 
-      <div className="overflow-x-auto">
-        <table className="w-full">
-          <tbody>
+      <div className="max-h-[50vh] overflow-auto">
+        <table className="w-full table-auto border-collapse">
+          <thead>
             <tr className="border-b border-gray-700">
-              <td className="px-4 py-3 text-gray-400 font-medium">Bit Value</td>
-              {bits.map((bit, idx) => (
-                <td key={idx} className="px-4 py-3 text-center">
-                  <span
-                    className={`inline-block px-3 py-1 rounded font-mono font-bold ${
-                      bit === 1
-                        ? 'bg-purple-600 text-white'
-                        : 'bg-gray-700 text-gray-300'
-                    }`}
-                  >
-                    <MathText>{String(bit)}</MathText>
-                  </span>
-                </td>
-              ))}
-            </tr>
-            <tr className="border-b border-gray-700">
-              <td className="px-4 py-3 text-gray-400 font-medium">Result</td>
-              {steps.map((step, idx) => (
-                <td
-                  key={idx}
-                  className="px-4 py-3 text-center text-white font-mono text-lg"
-                >
-                  <MathText>{String(step.value)}</MathText>
-                </td>
-              ))}
-            </tr>
-            <tr>
-              <td className="px-4 py-3 text-gray-400 font-medium">
+              <th
+                scope="col"
+                className="sticky top-0 left-0 z-20 bg-gray-800 px-4 py-3 text-left text-gray-400 font-medium border-r border-gray-700"
+              >
+                Bit
+              </th>
+
+              <th
+                scope="col"
+                className="sticky top-0 z-10 bg-gray-800 px-4 py-3 text-left text-gray-400 font-medium border-r border-gray-700"
+              >
                 Operation <MathText>{`(\\bmod ${m})`}</MathText>
-              </td>
-              {steps.map((step, idx) => (
-                <td
-                  key={idx}
-                  className="px-4 py-3 text-center text-gray-300 text-sm"
-                >
-                  <MathText>{step.operation}</MathText>
-                </td>
-              ))}
+              </th>
+
+              <th
+                scope="col"
+                className="sticky top-0 z-10 bg-gray-800 px-4 py-3 text-left text-gray-400 font-medium"
+              >
+                Result
+              </th>
             </tr>
+          </thead>
+
+          <tbody>
+            {Array.from({ length: rowCount }).map((_, idx) => {
+              const bit = bits[idx];
+              const step = steps[idx];
+
+              return (
+                <tr
+                  key={idx}
+                  className="border-b border-gray-700 last:border-b-0"
+                >
+                  <td className="sticky left-0 z-10 bg-gray-800 px-4 py-3 border-r border-gray-700">
+                    <span
+                      className={`inline-block px-3 py-1 rounded font-mono font-bold ${
+                        bit === 1
+                          ? 'bg-purple-600 text-white'
+                          : 'bg-gray-700 text-gray-300'
+                      }`}
+                    >
+                      <MathText>{String(bit)}</MathText>
+                    </span>
+                  </td>
+
+                  <td className="px-4 py-3 text-gray-300 text-sm  border-r border-gray-700">
+                    <MathText>{step.operation}</MathText>
+                  </td>
+
+                  <td className="px-4 py-3 text-white font-mono text-lg">
+                    <MathText>{String(step.value)}</MathText>
+                  </td>
+                </tr>
+              );
+            })}
           </tbody>
         </table>
       </div>

@@ -39,7 +39,7 @@ const FinalResult: React.FC<FinalResultProps> = ({
   result,
 }: FinalResultProps) => {
   return (
-    <div className="bg-linear-to-r from-purple-600/50 to-purple-800/50 rounded-xl p-8 shadow-2xl border border-purple-600">
+    <div className="bg-linear-to-r from-purple-600/50 to-purple-800/50 rounded-xl p-8 shadow-2xl border border-purple-600 mask-b-to-85%">
       <div className="text-center">
         <p className="text-gray-300 text-lg mb-2">Final Result:</p>
         <div className="text-3xl font-bold text-purple-200">
