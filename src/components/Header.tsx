@@ -25,6 +25,15 @@ const Header: React.FC = () => {
         <MathText className="text-gray-300">{'a^n \\pmod{m}'}</MathText> using
         binary exponentiation
       </p>
+      <p className="text-gray-500 text-sm mt-2">
+        For demonstrative purposes (and to keep the UI readable), inputs are
+        limited to values less than{' '}
+        <span className="font-mono text-gray-400">
+          <MathText>{`2^{36}`}</MathText>
+        </span>{' '}
+        (68,719,476,736).
+      </p>
+      {/* Since this for demonstrative purposes, this works */}
     </div>
   );
 };

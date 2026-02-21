@@ -17,7 +17,7 @@
 
 import type { CalculationResult, ParsedInputs } from '../types';
 
-const EXPONENT_LIMIT = 2n ** 1048n;
+const EXPONENT_LIMIT = 2n ** 36n;
 
 /**
  * Checks whether a string consists of one or more ASCII decimal digits (`0`-`9`).
