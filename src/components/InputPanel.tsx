@@ -17,7 +17,8 @@ import MathText from './MathText';
  * @property {string} m - Current value of the modulus input
  * @property {(value: string) => void} onAChange - Callback when base input changes
  * @property {(value: string) => void} onNChange - Callback when exponent input changes
- * @property {(value: string) => void} onMChange - Callback when modulus input changes
+ * @property {(value: string) => void} onMChange - Callback when modulus input changes\
+ * @property {() => void} onResetDefaults - Callback to reset inputs to default values
  * @property {string} error - Error message to display (empty if no error)
  */
 export interface InputPanelProps {
@@ -27,6 +28,7 @@ export interface InputPanelProps {
   onAChange: (value: string) => void;
   onNChange: (value: string) => void;
   onMChange: (value: string) => void;
+  onResetDefaults: () => void;
   error: string;
 }
 
@@ -44,6 +46,7 @@ export interface InputPanelProps {
  *   onAChange={setA}
  *   onNChange={setN}
  *   onMChange={setM}
+ *   onResetDefaults={resetDefaults}
  *   error=""
  * />
  */
@@ -54,6 +57,7 @@ const InputPanel: React.FC<InputPanelProps> = ({
   onAChange,
   onNChange,
   onMChange,
+  onResetDefaults,
   error,
 }: InputPanelProps) => {
   /**
@@ -75,6 +79,19 @@ const InputPanel: React.FC<InputPanelProps> = ({
 
   return (
     <div className="bg-gray-800 rounded-xl p-6 shadow-2xl border border-gray-700 mb-8">
+      {/* Header row */}
+      <div className="flex items-center justify-between mb-4">
+        <h2 className="text-xl font-semibold text-purple-300">Inputs</h2>
+        <button
+          type="button"
+          onClick={onResetDefaults}
+          className="text-sm text-gray-300 hover:text-white border border-gray-600 rounded-md px-3 py-1"
+        >
+          Reset defaults
+        </button>
+      </div>
+
+      {/* Inputs grid */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         <div>
           <label className="block text-purple-300 font-semibold mb-2">
@@ -88,6 +105,7 @@ const InputPanel: React.FC<InputPanelProps> = ({
             placeholder="Enter base"
           />
         </div>
+
         <div>
           <label className="block text-purple-300 font-semibold mb-2">
             Exponent <MathText>(n)</MathText>
@@ -100,6 +118,7 @@ const InputPanel: React.FC<InputPanelProps> = ({
             placeholder="Enter exponent"
           />
         </div>
+
         <div>
           <label className="block text-purple-300 font-semibold mb-2">
             Modulus <MathText>(m)</MathText>

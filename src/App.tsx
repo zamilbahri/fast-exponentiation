@@ -152,6 +152,12 @@ const App: React.FC = () => {
   const [n, setN] = useState<string>(() => readFromUrl().n);
   const [m, setM] = useState<string>(() => readFromUrl().m);
 
+  const resetDefaults = React.useCallback(() => {
+    setA(DEFAULTS.a);
+    setN(DEFAULTS.n);
+    setM(DEFAULTS.m);
+  }, []);
+
   // Ref to hold the debounce timer ID for URL writing
   const writeTimer = React.useRef<number | null>(null);
 
@@ -195,6 +201,7 @@ const App: React.FC = () => {
           onAChange={setA}
           onNChange={setN}
           onMChange={setM}
+          onResetDefaults={resetDefaults}
           error={error}
         />
 
