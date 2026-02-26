@@ -14,12 +14,12 @@ const Footer: React.FC = (): React.ReactElement => {
       <p className="text-sm text-gray-500">
         Check out my{' '}
         <a
-          href="https://zamilbahri.github.io/crt-solver"
+          href="https://zamilbahri.github.io/mod-calculator-suite"
           target="_blank"
           rel="noopener noreferrer"
           className="text-purple-300 hover:text-purple-200 transition-colors underline"
         >
-          Chinese Remainder Theorem solver
+          Mod Calculator Suite
         </a>
         !
       </p>
